@@ -19,7 +19,7 @@ router.get("/new", (req, res) => {
 router.post("/", (req, res) => {
   Blog.create(req.body.blog, (err, newBlog) => {
     if (err) {
-      res.render("new");
+      res.render("blog/new");
     } else {
       res.redirect("/blogs");
     }
@@ -27,13 +27,15 @@ router.post("/", (req, res) => {
 });
 // SHOW ROUTE
 router.get("/:id", (req, res) => {
-  Blog.findById(req.params.id, (err, blogFound) => {
-    if (err) {
-      res.redirect("/blogs");
-    } else {
-      res.render("show", { blog: blogFound });
-    }
-  });
+  Blog.findById(req.params.id)
+    .populate("comments")
+    .exec((err, foundBlog) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.render("blog/show", { blog: foundBlog });
+      }
+    });
 });
 //EDIT ROUTES
 router.get("/:id/edit", (req, res) => {
@@ -41,7 +43,7 @@ router.get("/:id/edit", (req, res) => {
     if (err) {
       res.redirect("/blogs");
     } else {
-      res.render("edit", { blog: blogFound });
+      res.render("blog/edit", { blog: blogFound });
     }
   });
 });

@@ -7,8 +7,7 @@ const app = express();
 const uri = "mongodb://localhost/blog_app";
 mongoose.connect(uri, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false
+  useUnifiedTopology: true
 });
 mongoose.connection.on("connected", () => {
   console.log("connected to DB");
@@ -20,12 +19,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 const Blog = require("./models/blog");
+const Comment = require("./models/comment");
 
 const blogRoutes = require("./routes/blog");
 const indexRoutes = require("./routes/index");
+const commentRoutes = require("./routes/comment");
 
 app.use("/", indexRoutes);
 app.use("/blogs", blogRoutes);
+app.use("/blogs/:id/comments", commentRoutes);
 
 app.listen(5000, () => {
   console.log("BlogApp is runing on 5000");

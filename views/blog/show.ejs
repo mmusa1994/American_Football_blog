@@ -1,4 +1,4 @@
-<%- include("partials/header") %>
+<%- include("../partials/header") %>
 <div class="ui main text container segment" style="margin:7em 0 7em 0;">
   <div class="ui huge header"><%= blog.title %></div>
   <div class="ui top attached ">
@@ -22,5 +22,24 @@
       <button class="ui red basic button" type="submit">DELETE</button>
     </form>
   </div>
+  <div class="ui container segments">
+    <div class="ui segment">
+      <h5 class="text-right">
+        <a
+          class="ui yellow basic button "
+          href="/blogs/<%= blog._id%>/comments/new"
+          >Add comment
+        </a>
+      </h5>
+      <div>
+        <% blog.comments.forEach((comment)=>{%>
+        <strong><%= comment.author %></strong>
+        <span style="float: right; font-size: 12px;">10 days ago</span>
+        <p><%= comment.text %></p>
+        <%}) %>
+      </div>
+    </div>
+  </div>
 </div>
-<%- include("partials/footer") %>
+
+<%- include("../partials/footer") %>
