@@ -9,6 +9,9 @@
     <div class="content">
       <strong><%= blog.created.toDateString()%></strong>
     </div>
+    <div class="content">
+      <strong><%= blog.author.username%></strong>
+    </div>
     <div class="description">
       <p><%= blog.body%></p>
     </div>
@@ -26,16 +29,18 @@
   <div class="ui container segments">
     <div class="ui segment">
       <h5 class="text-right">
+        <% if(currentUser){%>
         <a
           class="ui yellow basic button "
           href="/blogs/<%= blog._id%>/comments/new"
           >Add comment
         </a>
+        <%}%>
       </h5>
       <div>
         <% blog.comments.forEach((comment)=>{%>
-        <strong><%= comment.author %></strong>
-        <span style="float: right; font-size: 12px;">10 days ago</span>
+        <strong><%= comment.author%></strong>
+        <span style="float: right; font-size: 12px;">1 min ago</span>
         <p><%= comment.text %></p>
         <%}) %>
       </div>

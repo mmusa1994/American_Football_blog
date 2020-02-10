@@ -18,8 +18,6 @@ router.get("/new", middleware.isLoggedIn, (req, res) => {
 });
 //CREATE ROUTE
 router.post("/", middleware.isLoggedIn, (req, res) => {
-  console.log(req.body.blog);
-  console.log(req.body.title);
   const title = req.body.title;
   const image = req.body.image;
   const dsc = req.body.body;
