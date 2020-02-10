@@ -1,5 +1,6 @@
 <%- include("../partials/header") %>
-<div class="ui main text container segment" style="margin:7em 0 7em 0;">
+
+<div class="ui main text container segment">
   <div class="ui huge header"><%= blog.title %></div>
   <div class="ui top attached ">
     <div class="item">
@@ -12,16 +13,16 @@
       <p><%= blog.body%></p>
     </div>
   </div>
-  <div style="margin-top: 1em;">
-    <a class="ui orange basic button" href="/blogs/<%=blog._id%>/edit">EDIT</a>
-    <form
-      action="/blogs/<%=blog._id%>?_method=DELETE"
-      method="POST"
-      style="display: inline;"
-    >
-      <button class="ui red basic button" type="submit">DELETE</button>
-    </form>
-  </div>
+  <% if(currentUser && blog.author.id.equals(currentUser._id)){%>
+  <a class="ui orange basic button" href="/blogs/<%=blog._id%>/edit">EDIT</a>
+  <form
+    action="/blogs/<%=blog._id%>?_method=DELETE"
+    method="POST"
+    style="display: inline;"
+  >
+    <button class="ui red basic button" type="submit">DELETE</button>
+  </form>
+  <%}%>
   <div class="ui container segments">
     <div class="ui segment">
       <h5 class="text-right">

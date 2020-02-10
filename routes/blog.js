@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Blog = require("../models/blog");
+const middleware = require("../middleware");
 
 router.get("/", (req, res) => {
   Blog.find((err, blogs) => {
@@ -12,12 +13,27 @@ router.get("/", (req, res) => {
   });
 });
 // NEW ROUTE
-router.get("/new", (req, res) => {
-  res.render("new");
+router.get("/new", middleware.isLoggedIn, (req, res) => {
+  res.render("blog/new");
 });
 //CREATE ROUTE
-router.post("/", (req, res) => {
-  Blog.create(req.body.blog, (err, newBlog) => {
+router.post("/", middleware.isLoggedIn, (req, res) => {
+  console.log(req.body.blog);
+  console.log(req.body.title);
+  const title = req.body.title;
+  const image = req.body.image;
+  const dsc = req.body.body;
+  const author = {
+    id: req.user._id,
+    username: req.user.username
+  };
+  const newBlog = {
+    title: title,
+    image: image,
+    body: dsc,
+    author: author
+  };
+  Blog.create(newBlog, (err, newBlogcreated) => {
     if (err) {
       res.render("blog/new");
     } else {
@@ -38,7 +54,7 @@ router.get("/:id", (req, res) => {
     });
 });
 //EDIT ROUTES
-router.get("/:id/edit", (req, res) => {
+router.get("/:id/edit", middleware.checkBlogOwnership, (req, res) => {
   Blog.findById(req.params.id, (err, blogFound) => {
     if (err) {
       res.redirect("/blogs");
@@ -48,7 +64,7 @@ router.get("/:id/edit", (req, res) => {
   });
 });
 // UPDATE ROUTES
-router.put("/:id", (req, res) => {
+router.put("/:id", middleware.checkBlogOwnership, (req, res) => {
   Blog.findByIdAndUpdate(req.params.id, req.body.blog, (err, updateBlog) => {
     if (err) {
       res.redirect("/blogs");
@@ -58,7 +74,7 @@ router.put("/:id", (req, res) => {
   });
 });
 //DELETE ROUTE
-router.delete("/:id", (req, res) => {
+router.delete("/:id", middleware.checkBlogOwnership, (req, res) => {
   Blog.findByIdAndRemove(req.params.id, req.body.blog, (err, updateBlog) => {
     if (err) {
       res.redirect("/blogs" + req.params.id);
